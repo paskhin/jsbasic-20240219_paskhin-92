@@ -10,10 +10,7 @@ function print(text) {
  * чтобы функция sayHello работала корректно
  */
 function isValid(name) {
-  if (name !== null && name.length >= 4 && name.split(' ').length-1 == 0) {
-    return true;
-  }
-  return false
+  return name !== null && name.length >= 4 && name.split(' ').length-1 == 0;
 }
 
 function sayHello() {
@@ -25,3 +22,4 @@ function sayHello() {
     print('Некорректное имя');
   }
 }
+
