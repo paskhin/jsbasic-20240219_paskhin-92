@@ -5,7 +5,7 @@ function highlight(table) {
     } else if (table.rows[i].cells[3].dataset.available === 'false') {
       table.rows[i].classList.add('unavailable');
     } else if (table.rows[i].cells[3].dataset.available === undefined) {
-      table.rows[i].hidden = 'true';
+      table.rows[i].hidden = true;
     } if (table.rows[i].cells[2].innerHTML == 'm') {
       table.rows[i].classList.add('male');
     } else if (table.rows[i].cells[2].innerHTML == 'f') {
