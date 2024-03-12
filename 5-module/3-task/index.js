@@ -1,40 +1,31 @@
 function initCarousel() {
-  let buttonLeft = document.querySelector('.carousel__arrow_left');
-  let buttonRight = document.querySelector('.carousel__arrow_right');
-  let sliderList = document.querySelector('.carousel__inner');
-  let slide = document.querySelector('.carousel__slide');
-  let slides = document.querySelectorAll('.carousel__slide');
-  let slideWidth = slide.offsetWidth;
-  let offSet = 0;
-  let maxOffSet = -slideWidth * (slides.length - 1);
-  let sliderCoord = slide.getBoundingClientRect();
-
+  let elem = document.querySelector('[data-carousel-holder]');
+  let buttonLeft = elem.querySelector('.carousel__arrow_left');
+  let buttonRight = elem.querySelector('.carousel__arrow_right');
+  let sliderList = elem.querySelector('.carousel__inner');
+  let slides = elem.querySelectorAll('.carousel__slide');
+  let slideWidth = sliderList.offsetWidth;
+  let counter = 0;
   buttonLeft.style.display = 'none';
-  document.addEventListener('click', function (event) {
-    let target = event.target;
-    let clickCoordLeft = event.clientX - sliderCoord.left;
-    if (!target.closest('.carousel__img') && !target.closest('.carousel__arrow')) {
-      return;
+  elem.addEventListener('click', function (event) {
+    slideWidth = sliderList.offsetWidth;
 
-    } else if (clickCoordLeft < slideWidth / 2) {
+    let isLeftClick = event.target.closest('.carousel__arrow_left');
+    let isRightClick = event.target.closest('.carousel__arrow_right');
+
+    if (isLeftClick) {
+      counter--;
+      buttonLeft.style.display = counter > 0 ? '' : 'none';
       buttonRight.style.display = '';
-
-      if (offSet >= -slideWidth) {
-        buttonLeft.style.display = 'none';
-        offSet = 0;
-      } else {
-        offSet = offSet + slideWidth;
-      }
-
-    } else if (clickCoordLeft > slideWidth / 2) {
+    } else if (isRightClick) {
+      counter++;
       buttonLeft.style.display = '';
-      offSet = offSet - slideWidth;
-
-      if (offSet <= maxOffSet) {
-        buttonRight.style.display = 'none';
-        offSet = maxOffSet;
-      }
+      buttonRight.style.display = counter >= slides.length - 1 ? 'none' : '';
     }
-    sliderList.style.transform = `translateX(${offSet}px)`;
-  })
+
+    if (isLeftClick || isRightClick) {
+      let offset = -slideWidth * counter;
+      sliderList.style.transform = `translateX(${offset}px)`;
+    }
+  });
 }
