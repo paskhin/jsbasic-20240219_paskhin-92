@@ -24,6 +24,10 @@
     });
 
     holder.append(card.elem);
+    card.elem.addEventListener('product-add', (event) => {
+      alert(`${event.detail} добавлен в корзину`)
+    })
+
   </script>
 </body>
 
