@@ -40,6 +40,7 @@ export default class CartIcon {
 
   updatePosition() {
     let container = document.querySelector('.container');
+    if (!container) return;
     let containerRight = container.getBoundingClientRect().right;
     let scrollTop = document.documentElement.scrollTop;
 
