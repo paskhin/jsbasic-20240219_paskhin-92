@@ -59,7 +59,5 @@ export default class Cart {
   getTotalPrice() {
     return this.cartItems.reduce((sum, current) => sum + (current.product.price * current.count), 0);
   }
-
-
 }
 

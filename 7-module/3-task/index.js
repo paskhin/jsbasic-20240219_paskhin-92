@@ -26,7 +26,7 @@ export default class StepSlider {
     let sliderSteps = slider.querySelector('.slider__steps');
     for (let i = 0; i < this.steps; i++) {
       let step = createElement(`
-        <span></span>
+        <span id = '${i}'></span>
   `);
       if (i == this.value) {
         step.classList.add('slider__step-active')
@@ -43,12 +43,13 @@ export default class StepSlider {
     let spans = stepsContainer.querySelectorAll('span');
     let sliderThumb = this.elem.querySelector('.slider__thumb');
     let sliderProgress = this.elem.querySelector('.slider__progress');
+
     this.elem.addEventListener('click', (event) => {
       let sliderSegment = 100 / (spans.length - 1);
-      let sliderWidth = this.elem.clientWidth / 100;
+      let oneOfsliderWidth = this.elem.clientWidth / 100;
       let sliderCoord = this.elem.getBoundingClientRect();
       let clickCoordLeft = event.clientX - sliderCoord.left;
-      let clickToPercent = clickCoordLeft / sliderWidth / sliderSegment;
+      let clickToPercent = clickCoordLeft / oneOfsliderWidth / sliderSegment;
       spans.forEach((span, index) => {
         span.classList.remove('slider__step-active');
         if (index == Math.round(clickToPercent)) {
@@ -64,6 +65,98 @@ export default class StepSlider {
           this.elem.dispatchEvent(customEvent)
         }
       });
+    });
+
+
+
+    this.elem.addEventListener('pointerdown', (mouseDownEvent) => {
+      this.elem.ondragstart = () => false;
+
+      let thumb = mouseDownEvent.target.closest('.slider__thumb');
+      let coordThumb = sliderThumb.getBoundingClientRect().left;
+      let shiftThumb = mouseDownEvent.clientX - coordThumb;
+
+      if (thumb) {
+        sliderThumb.style.position = 'absolute';
+        sliderThumb.style.zIndex = 99999999;
+        this.elem.classList.add('slider_dragging');
+      }
+
+      // Вспомогательная ф-ция
+      let calcLeftByEvent = (event) => {
+        let newLeft = (event.clientX - this.elem.getBoundingClientRect().left) / this.elem.offsetWidth;
+
+        if (newLeft < 0) { newLeft = 0; }
+        if (newLeft > 1) { newLeft = 1; }
+
+        return newLeft;
+      }
+
+      // Эта ф-ция должны быть стрелочной иначе this внутри будет ссылаться на document
+      // function onMouseMove(mouseMoveEvent) {
+      let onMouseMove = (mouseMoveEvent) => {
+        // внутри работает только с this.elem
+
+        mouseMoveEvent.preventDefault();
+
+        let newLeft = calcLeftByEvent(mouseMoveEvent);
+
+        this.elem.querySelector('.slider__thumb').style.left = `${newLeft * 100}%`;
+        this.elem.querySelector('.slider__progress').style.width = `${newLeft * 100}%`;
+
+        // Show the nearest value
+        // First half of step is 1, et
+        // |-------|-------|-------|-------|
+        // | 1 /   2   /   3   /   4   / 5 |
+        this.value = Math.round((this.steps - 1) * newLeft);
+        this.elem.querySelector('.slider__value').innerHTML = this.value;
+
+        if (this.elem.querySelector('.slider__step-active')) {
+          this.elem.querySelector('.slider__step-active').classList.remove('slider__step-active');
+        }
+
+        this.elem.querySelector('.slider__steps').children[this.value].classList.add('slider__step-active');
+
+
+
+        // let slider = document.querySelector('.slider')
+        // let coordSlider = slider.getBoundingClientRect().left;
+        // let sliderWidth = slider.clientWidth;
+        // let value = document.querySelector('.slider__value');
+        // let x = mouseMoveEvent.pageX - shiftThumb - coordSlider;
+        // let leftRelative = (x / (sliderWidth / 100)) / 100;
+        // let approximateValue = leftRelative * (spans.length - 1);
+        // let valMath = Math.round(approximateValue);
+        // value.innerHTML = valMath
+        // spans.forEach((span, index) => {
+        //   span.classList.remove('slider__step-active');
+        //   if (index == valMath) {
+        //     span.classList.add('slider__step-active');
+        //   }
+        // })
+        // if (x < 0) {
+        //   sliderThumb.style.left = 0;
+        //   sliderProgress.style.width = 0;
+        // } else if (x > sliderWidth) {
+        //   sliderThumb.style.left = 100 + '%';
+        //   sliderProgress.style.width = 100 + '%';
+        // } else {
+        //   sliderThumb.style.left = (x / (sliderWidth / 100)) + '%';
+        //   sliderProgress.style.width = (x / (sliderWidth / 100)) + '%';
+        // };
+      }
+      document.addEventListener('pointermove', onMouseMove);
+
+      document.addEventListener('pointerup', () => {
+        document.removeEventListener('pointermove', onMouseMove);
+        sliderThumb.onmouseup = null;
+        this.elem.classList.remove('slider_dragging');
+        let customEventMove = new CustomEvent("slider-change", {
+          detail: this.value,
+          bubbles: true
+        });
+        this.elem.dispatchEvent(customEventMove)
+      })
     })
   }
 }
