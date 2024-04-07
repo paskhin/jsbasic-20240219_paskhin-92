@@ -61,6 +61,5 @@ export default class Modal {
       }
     };
     document.addEventListener('keydown', onKeydown);
-    // document.removeEventListener('keydown', onKeydown);
   };
 }
