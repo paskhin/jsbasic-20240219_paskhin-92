@@ -144,6 +144,7 @@ export default class Cart {
         <img src="/assets/images/delivery.gif">
       </p>
     </div>`))
+    this.cartIcon.update(this);
     })
   }
 
@@ -176,13 +177,10 @@ export default class Cart {
     event.preventDefault();
     let buttonForm = event.target.querySelector('button');
     buttonForm.classList.add('is-loading');
-    let response = await fetch('https://httpbin.org/post', {
+    await fetch('https://httpbin.org/post', {
       method: 'POST',
       body: new FormData(event.target)
     });
-    // if (response) {
-
-    // }
 
   };
 
