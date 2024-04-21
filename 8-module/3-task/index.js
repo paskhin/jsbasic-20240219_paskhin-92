@@ -1,3 +1,4 @@
+
 export default class Cart {
   cartItems = []; // [product: {...}, count: N]
 
@@ -57,6 +58,12 @@ export default class Cart {
       (sum, item) => sum + item.product.price * item.count,
       0
     );
+  }
+
+  onProductUpdate(cartItem) {
+    // реализуем в следующей задаче
+
+    this.cartIcon.update(this);
   }
 }
 

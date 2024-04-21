@@ -20,9 +20,9 @@ export default class ProductGrid {
     this.sub('inner').innerHTML = '';
 
     for (let product of this.products) {
-      if (this.filters.noNuts && product.nuts) {continue;}
+      if (this.filters.noNuts && product.nuts) { continue; }
 
-      if (this.filters.vegeterianOnly && !product.vegeterian) {continue;}
+      if (this.filters.vegeterianOnly && !product.vegeterian) { continue; }
 
       if (this.filters.maxSpiciness !== undefined && product.spiciness > this.filters.maxSpiciness) {
         continue;
@@ -45,5 +45,6 @@ export default class ProductGrid {
   sub(ref) {
     return this.elem.querySelector(`.products-grid__${ref}`);
   }
-
 }
+
+
