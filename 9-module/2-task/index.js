@@ -11,11 +11,6 @@ import CartIcon from '../../8-module/1-task/index.js';
 import Cart from '../../8-module/4-task/index.js';
 
 export default class Main {
-  constructor() {
-
-  }
-
-  async render() {
 
     this.renderCarousel();
     this.renderRibbon();
