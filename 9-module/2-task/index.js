@@ -12,6 +12,7 @@ import Cart from '../../8-module/4-task/index.js';
 
 export default class Main {
   constructor() {
+
   }
 
   async render() {
@@ -105,4 +106,3 @@ export default class Main {
     return products;
   }
 }
-
