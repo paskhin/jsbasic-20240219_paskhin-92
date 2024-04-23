@@ -144,7 +144,7 @@ export default class Cart {
         <img src="/assets/images/delivery.gif">
       </p>
     </div>`))
-    this.cartIcon.update(this);
+      this.cartIcon.update(this);
     })
   }
 
