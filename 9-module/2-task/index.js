@@ -12,10 +12,12 @@ import Cart from '../../8-module/4-task/index.js';
 
 export default class Main {
 
+
   constructor() {
   }
 
   async render() {
+
     this.renderCarousel();
     this.renderRibbon();
     this.renderStepSlider();
